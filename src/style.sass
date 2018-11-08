@@ -2,18 +2,94 @@ body
   color: #333
   font-family: 'Source Sans Pro'
   line-height: 1.5em
+  text-rendering: optimizeLegibility
 
 .root
   display: flex
   flex-direction: row
   justify-content: space-between
   height: 100vh
-  weight: 100vw
+  width: 100vw
 
 .col
   width: 320px
-  background-color: #eee
   height: 100%
+
+.metacard
+  //border: 1px solid rgba(0,0,0,0.15)
+  border-bottom: none
+  border-radius: 3px
+  margin: 20px
+  width: calc(100% - 40px)
+  height: auto
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2)
+
+.metacardheader
+  background-color: #3498db
+  //border-bottom: 1px solid rgba(0,0,0,0.15)
+  width: 100%
+  padding: 10px
+  box-sizing: border-box
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+
+.header
+  font-weight: 600
+  color: #fff
+  font-size: 1.2em
+
+.card
+  border-bottom: 1px solid rgba(0,0,0,0.15)
+  width: 100%
+  padding: 10px
+  box-sizing: border-box
+
+.card:last-child
+  border-bottom: none
+
+.flexrow
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+
+.flexcol
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+
+.threadmeta
+  margin-bottom: 0.3em
+
+.postmeta
+  margin-bottom: 0.3em
+
+#chancol .card p:nth-child(2)
+  color: #777
+
+#boardcol .threadmeta
+  p:nth-child(1)
+    font-weight: 600
+    color: #444
+  p:nth-child(2)
+    color: #777
+
+#boardcol
+  width: 400px
+
+#threadcol
+  width: 600px
+
+#threadcol .postmeta
+  span:nth-child(1)
+    font-weight: 600
+    color: #444
+    margin-right: 10px
+  span:nth-child(2)
+    color: #777
 
 *
   margin: 0
