@@ -13,10 +13,12 @@ import Chan from './containers/Chan'
 var openBoards = [];
 var openThreads = [];
 
-export const newBoard = (id) =>
-  console.log(id)
+export const newBoard = (id) => {
+  console.log(id);
+  openBoards.append(id);
+}
 
-export const client = new ApolloClient({
+const client = new ApolloClient({
   uri: "./graphql"
 });
 
