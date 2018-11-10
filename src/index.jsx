@@ -1,15 +1,24 @@
 import React from 'react'
 import { render } from 'react-dom'
-import {
-  HashRouter as Router,
-  Redirect,
-  Switch,
-  Route,
-} from 'react-router-dom'
+
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
 
 import style from './style.sass'
 
 import history from './history'
+
+import Chan from './containers/Chan'
+
+var openBoards = [];
+var openThreads = [];
+
+export const newBoard = (id) =>
+  console.log(id)
+
+export const client = new ApolloClient({
+  uri: "./graphql"
+});
 
 class Init extends React.Component {
   constructor(props) {
@@ -18,63 +27,12 @@ class Init extends React.Component {
 
   render() {
       return (
-        <Router history={history}>
+        <ApolloProvider client={client}>
           <div className={style.root}>
             <div className={style.col} id={style.chancol}>
 
-              <div className={style.metacard}>
-                <div className={`${style.metacardheader} ${style.header}`}>
-                  <p>Eggchan</p>
-                  <i className="fas fa-ellipsis-v"></i>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/ck/</p>
-                  <p>cooking</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/diy/</p>
-                  <p>do it yourself</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/p/</p>
-                  <p>programming</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/r/</p>
-                  <p>rice</p>
-                </div>
-              </div>
+              <Chan />
 
-              <div className={style.metacard}>
-                <div className={`${style.metacardheader} ${style.header}`}>
-                  <p>Lainchan</p>
-                  <i className="fas fa-ellipsis-v"></i>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/λ/</p>
-                  <p>programming</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/diy/</p>
-                  <p>do it yourself</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/sec/</p>
-                  <p>security</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/Ω/</p>
-                  <p>technology</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/inter/</p>
-                  <p>interactive media</p>
-                </div>
-                <div className={`${style.card} ${style.flexrow}`}>
-                  <p>/lit/</p>
-                  <p>literature</p>
-                </div>
-              </div>
 
             </div>
 
@@ -235,7 +193,7 @@ class Init extends React.Component {
 
 
           </div>
-        </Router>
+        </ApolloProvider>
       );
     }
 }

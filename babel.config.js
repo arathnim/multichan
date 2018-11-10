@@ -16,7 +16,7 @@ module.exports = {
   env: {
     production: {
       plugins: [
-        ['lodash', { id: ['lodash', 'ramda'] }],
+        
       ],
     },
   },

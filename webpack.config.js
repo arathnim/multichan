@@ -34,9 +34,14 @@ const rules = [
     test: /\.sass$/,
     use: [
       MiniCssExtractPlugin.loader,
-      'css-loader',
+      'css-loader?modules',
       'sass-loader',
     ],
+  },
+  {
+   test: /\.mjs$/,
+   include: /node_modules/,
+   type: 'javascript/auto'
   },
   {
     test: /\.jsx?$/,
@@ -75,7 +80,7 @@ const clientConfig = {
   mode: nodeEnv,
   entry: { main: './src/index' },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.mjs', '.gql', '.graphql'],
   },
   output: {
     path: config.publicDir,
