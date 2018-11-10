@@ -10,21 +10,29 @@ import history from './history'
 
 import Chan from './containers/Chan'
 
-var openBoards = [];
-var openThreads = [];
-
-export const newBoard = (id) => {
-  console.log(id);
-  openBoards.append(id);
-}
-
 const client = new ApolloClient({
   uri: "./graphql"
 });
 
+// {openBoards.map((b) => <Board id={b}>)}
+
 class Init extends React.Component {
-  constructor(props) {
-    super(props);
+
+  state = {openBoards: [], openThreads: []}
+
+  newBoard(id) {
+    console.log('reached newBoard')
+    if (this.state.openBoards.includes(id)) {
+      // TODO: scroll to it
+    } else {
+      this.setState({openBoards: this.state.openBoards.concat([id])});
+      const boards = document.getElementById(style.boardcol).getElementsByClassName(style.metacard);
+      boardWindowInstance.scroll(boards[boards.length - 1], 300, "easeInOutSine")
+    }
+  }
+
+  newThread(id) {
+
   }
 
   render() {
@@ -32,13 +40,136 @@ class Init extends React.Component {
         <ApolloProvider client={client}>
           <div className={style.root}>
             <div className={style.col} id={style.chancol}>
-
-              <Chan />
-
-
+              <Chan openNewBoard={this.newBoard} />
             </div>
 
             <div className={style.col} id={style.boardcol}>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /p/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Contributions</p>
+                    <p>Arathnim, yesterday</p>
+                  </div>
+                  <p>This site brought to you by react.js, codepen, lambdacomplex, dysfigured, arathnim, and delicious apple brandy.</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Go Thread</p>
+                    <p>Lambda, 2 days ago</p>
+                  </div>
+                  <p>Go Thread? Go Thread.</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Lisp General</p>
+                    <p>Anonymous, a week ago</p>
+                  </div>
+                  <p>Commence your worship of the programmable programming language.</p>
+                </div>
+              </div>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /ck/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>/CG/ - Cheese General</p>
+                    <p>Anonymous, a week ago</p>
+                  </div>
+                  <p>So, I think my latest queso fresco turned out pretty good. I need to order some rennet so I can make some mozzarella or something.</p>
+                </div>
+              </div>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /diy/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Eggchan General</p>
+                    <p>Anonymous, 3 day ago</p>
+                  </div>
+                  <p>Eggchan is /diy/, right? (tbh i'm gonna spam this thread to test shit)</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Layout on mobile</p>
+                    <p>Anonymous, 5 day ago</p>
+                  </div>
+                  <p>It seems broken. Threads appear to be indented, giving the impression they are replies to other threads.</p>
+                </div>
+              </div>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /p/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Contributions</p>
+                    <p>Arathnim, yesterday</p>
+                  </div>
+                  <p>This site brought to you by react.js, codepen, lambdacomplex, dysfigured, arathnim, and delicious apple brandy.</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Go Thread</p>
+                    <p>Lambda, 2 days ago</p>
+                  </div>
+                  <p>Go Thread? Go Thread.</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Lisp General</p>
+                    <p>Anonymous, a week ago</p>
+                  </div>
+                  <p>Commence your worship of the programmable programming language.</p>
+                </div>
+              </div>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /ck/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>/CG/ - Cheese General</p>
+                    <p>Anonymous, a week ago</p>
+                  </div>
+                  <p>So, I think my latest queso fresco turned out pretty good. I need to order some rennet so I can make some mozzarella or something.</p>
+                </div>
+              </div>
+
+              <div className={style.metacard}>
+                <div className={`${style.metacardheader} ${style.header}`}>
+                  <p>Eggchan /diy/</p>
+                  <i className="fas fa-ellipsis-v"></i>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Eggchan General</p>
+                    <p>Anonymous, 3 day ago</p>
+                  </div>
+                  <p>Eggchan is /diy/, right? (tbh i'm gonna spam this thread to test shit)</p>
+                </div>
+                <div className={style.card}>
+                  <div className={`${style.threadmeta} ${style.flexrow}`}>
+                    <p>Layout on mobile</p>
+                    <p>Anonymous, 5 day ago</p>
+                  </div>
+                  <p>It seems broken. Threads appear to be indented, giving the impression they are replies to other threads.</p>
+                </div>
+              </div>
 
               <div className={style.metacard}>
                 <div className={`${style.metacardheader} ${style.header}`}>
@@ -204,9 +335,10 @@ document.title="multichan"
 
 render(<Init />, document.getElementById('main'))
 
+var chanWindowInstance, boardWindowInstance, threadWindowInstance;
+
 document.addEventListener("DOMContentLoaded", function() {
-        OverlayScrollbars(
-          [document.getElementById(style.chancol), document.getElementById(style.boardcol), document.getElementById(style.threadcol)],
-          { scrollbars: { visibility: 'hidden'} }
-        );
+  chanWindowInstance   = OverlayScrollbars(document.getElementById(style.chancol),   { scrollbars: { visibility: 'hidden'} });
+  boardWindowInstance  = OverlayScrollbars(document.getElementById(style.boardcol),  { scrollbars: { visibility: 'hidden'} });
+  threadWindowInstance = OverlayScrollbars(document.getElementById(style.threadcol), { scrollbars: { visibility: 'hidden'} });
 });

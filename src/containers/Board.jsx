@@ -4,16 +4,14 @@ import style from '../style.sass'
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
-const Chan = ({ openNewBoard }) => (
+const Board = ({ id }) => (
   <Query
     query={gql`
       query {
+        threads(id: $id) {
           name
-          boards {
-            name
-            description
-            id
-          }
+          id
+        }
       }
     `}
   >
@@ -24,7 +22,7 @@ const Chan = ({ openNewBoard }) => (
           <i className="fas fa-ellipsis-v"></i>
         </div>
         {(!loading && !error) && data.boards.map((x) =>
-          <div className={`${style.card} ${style.flexrow}`} onClick={() => openNewBoard(x.id)}>
+          <div className={`${style.card} ${style.flexrow}`} onClick={() => newBoard(x.id)}>
             <p>{x.name}</p>
             <p>{x.description}</p>
           </div>
@@ -34,4 +32,4 @@ const Chan = ({ openNewBoard }) => (
   </Query>
 );
 
-export default Chan
+export default Board
