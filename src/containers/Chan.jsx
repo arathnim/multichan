@@ -10,12 +10,14 @@ import gql from "graphql-tag";
 const Chan = () => (
   <Query
     query={gql`
-      {
-        name
+      query {
         boards {
           name
-          description
-          id
+          boards {
+            name
+            description
+            id
+          }
         }
       }
     `}
