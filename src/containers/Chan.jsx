@@ -13,11 +13,8 @@ const Chan = () => (
       query {
         boards {
           name
-          boards {
-            name
-            description
-            id
-          }
+          description
+          id
         }
       }
     `}
