@@ -29,7 +29,9 @@ const typeDefs = gql`
   type Query {
     name: String
     boards: [Board]
+    board(id: Int): Board
     threads(id: Int): [Thread]
+    thread(id: Int): Thread
     posts(id: Int): [Post]
   }
 
@@ -56,8 +58,16 @@ const addPost = (threadID, message, author) =>
 const getBoards = () =>
   db('boards').select()
 
+const getBoard = (id) =>
+  db('boards').where({boardID: id}).select()
+    .then((x) => x[0])
+
 const getThreads = (id) =>
   db('threads').select().where({boardID: id})
+
+const getThread = (id) =>
+  db('threads').where({threadID: id}).select()
+    .then((x) => x[0])
 
 const getPosts = (id) =>
   db('posts').select().where({threadID: id})
@@ -65,10 +75,12 @@ const getPosts = (id) =>
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    name: () => name,
-    boards: () => getBoards(),
+    name:    ()           => name,
+    boards:  ()           => getBoards(),
+    board:   (root, args) => getBoard(args.id),
     threads: (root, args) => getThreads(args.id),
-    posts: (root, args) => getPosts(args.id),
+    thread:  (root, args) => getThread(args.id),
+    posts:   (root, args) => getPosts(args.id),
   },
 
   Mutation: {

@@ -4,19 +4,16 @@ import style from '../style.sass'
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
-const Board = ({ id, openNewThread, springStyle }) => (
+const Thread = ({ id, springStyle }) => (
   <Query variables={{ id: id }} pollInterval={10000}
     query={gql`
-      query Board($id: Int) {
-        board(id: $id) {
+      query Thread($id: Int) {
+        thread(id: $id) {
           name
-          threads {
-            name
+          posts {
+            author
+            message
             id
-            posts {
-              author
-              message
-            }
           }
         }
       }
@@ -31,24 +28,25 @@ const Board = ({ id, openNewThread, springStyle }) => (
         return (
           <div className={style.metacard} style={springStyle}>
             <div className={`${style.metacardheader} ${style.header}`}>
-              <p>{data.board.name}</p>
+              <p>{data.thread.name}</p>
               <i style={{marginRight: '4px'}} className="fas fa-ellipsis-v"></i>
             </div>
-            {data.board.threads.map((x) =>
-              <div className={style.card} onClick={() => openNewThread(x.id)}>
-                <div className={`${style.threadmeta} ${style.flexrow}`}>
-                  <p>{x.name}</p>
-                  <p>{x.posts[0].author}</p>
+            {data.thread.posts.map((x) =>
+              <div className={style.card}>
+                <div className={style.postmeta}>
+                  <span>{x.author}</span>
+                  <span>{"No. " + x.id}</span>
                 </div>
-                <p>{x.posts[0].message}</p>
+                <p>{x.message}</p>
               </div>
             )}
           </div>
         )
       }
     }
+
     }
   </Query>
 );
 
-export default Board
+export default Thread
