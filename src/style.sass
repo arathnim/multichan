@@ -88,6 +88,11 @@ body
 #boardcol
   width: 400px
 
+#boardcol .card p:nth-child(2)
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
+
 #threadcol
   width: 600px
 
@@ -98,6 +103,47 @@ body
     margin-right: 10px
   span:nth-child(2)
     color: #777
+
+form
+  width: 100%
+
+input
+  font-family: Source Sans Pro
+  font-size: 16px
+  outline: 0
+  border: 0
+  width: 100%
+  padding-bottom: 2px
+
+input:focus
+  outline: 0
+
+input:focus + .inputBorder
+  transform: scaleX(1)
+
+textarea
+  font-family: Source Sans Pro
+  font-size: 16px
+  outline: 0
+  border: 0
+  width: 100%
+  padding-bottom: 2px
+  resize: none
+
+textarea:focus
+  outline: 0
+
+textarea:focus + .inputBorder
+  transform: scaleX(1)
+
+.inputBorder
+  display: block
+  width: 100%
+  content: ''
+  border-bottom: solid 2px #3498db
+  transform: scaleX(0)
+  transform-origin:  0% 50%
+  transition: transform 250ms ease-in-out
 
 *
   margin: 0

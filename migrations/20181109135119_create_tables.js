@@ -1,8 +1,8 @@
 exports.down = knex =>
   Promise.all([
-    knex.schema.dropTableIfExists('boards'),
-    knex.schema.dropTableIfExists('threads'),
     knex.schema.dropTableIfExists('posts'),
+    knex.schema.dropTableIfExists('threads'),
+    knex.schema.dropTableIfExists('boards'),
   ])
 
 exports.up = knex =>
@@ -23,7 +23,7 @@ exports.up = knex =>
     knex.schema
       .createTable('posts', table => {
         table.increments('postID').primary()
-        table.string('message')
+        table.text('message')
         table.string('author')
         table.integer('threadID')
         table.foreign('threadID').references('threadID').inTable('threads')

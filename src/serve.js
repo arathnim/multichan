@@ -36,9 +36,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addBoard(name: String, description: String): Int
-    addThread(boardID: Int, name: String, message: String, author: String): Int
-    addPost(threadID: Int, message: String, author: String): Int
+    addBoard(name: String, description: String): Board
+    addThread(boardID: Int, name: String, message: String, author: String): Thread
+    addPost(threadID: Int, message: String, author: String): Post
     nuke: Boolean
   }
 `;
@@ -49,7 +49,8 @@ const addBoard = (name, description) =>
 
 const addThread = (boardID, name, message, author) =>
   db('threads').insert({name, boardID}, 'threadID')
-    .then((id) => addPost(id[0], message, author))
+    .then((id) =>
+      db('posts').insert({message, author, threadID: id[0]}).return(id[0]))
 
 const addPost = (threadID, message, author) =>
   db('posts').insert({message, author, threadID}, 'postID')
@@ -72,6 +73,10 @@ const getThread = (id) =>
 const getPosts = (id) =>
   db('posts').select().where({threadID: id})
 
+const getPost = (id) =>
+  db('posts').where({postID: id}).select()
+    .then((x) => x[0])
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
@@ -84,9 +89,9 @@ const resolvers = {
   },
 
   Mutation: {
-    addBoard: (root, args) => addBoard(args.name, args.description),
-    addThread: (root, args) => addThread(args.boardID, args.name, args.message, args.author),
-    addPost: (root, args) => addPost(args.threadID, args.message, args.author),
+    addBoard: (root, args) => addBoard(args.name, args.description).then((id) => getBoard(id)),
+    addThread: (root, args) => addThread(args.boardID, args.name, args.message, args.author).then((id) => getThread(id)),
+    addPost: (root, args) => addPost(args.threadID, args.message, args.author).then((id) => getPost(id)),
     nuke: (root, args) =>
       Promise.all([
         db('boards').del(),
