@@ -1,3 +1,5 @@
+$accent: #2c3e50
+
 body
   color: #333
   font-family: 'Source Sans Pro'
@@ -13,6 +15,7 @@ body
   position: absolute
   top: 0
   left: 0
+  background-color: #fff
 
 .col
   width: 320px
@@ -30,11 +33,11 @@ body
   margin: 20px
   width: calc(100% - 40px)
   height: auto
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2)
+  // box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.12),0 1px 5px 0 rgba(0,0,0,0.2)
   overflow-y: hidden
 
 .metacardheader
-  background-color: #3498db
+  background-color: $accent
   width: 100%
   padding: 10px
   box-sizing: border-box
@@ -49,10 +52,17 @@ body
   font-size: 1.2em
 
 .card
-  border-bottom: 1px solid rgba(0,0,0,0.15)
+  // border-bottom: 1px solid rgba(0,0,0,0.15)
   width: 100%
   padding: 10px
   box-sizing: border-box
+
+.card:hover
+  background-color: rgba($accent, 0.1)
+  input
+    background-color: transparent
+  textarea
+    background-color: transparent
 
 .card:last-child
   border-bottom: none
@@ -75,23 +85,91 @@ body
 .postmeta
   margin-bottom: 0.3em
 
+.searchBar
+  height: 50px
+  width: 320px
+  background-color: #0003
+  padding: 10px 16px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  flex-direction: row
+  box-sizing: border-box
+
+.searchBar input
+  color: #fff
+  background-color: transparent
+
+.searchBar input::placeholder
+  color: #fff
+
+.searchBar input:focus + .searchInfoBox
+  transform: scaleY(1)
+
+.searchInfoBox
+  background-color: #0003
+  padding: 10px 16px
+  color: adjust-color($accent, $lightness: +30%)
+
+.searchInfoBox strong
+  color: #fff
+
+.searchInfoBox p
+  margin-bottom: 0.4em
+
+.menu
+  height: 90px
+  width: 320px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  flex-direction: row
+  box-sizing: border-box
+
+.menuButton
+  width: 33%
+  height: 100%
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  color: #fff
+
+.menuButton:hover
+  background-color: #fff2
+
+.colspacer
+  height: 12px
+
+#chancol
+  background-color: $accent
+
+#chancol .metacard i
+  display: none
+
+#chancol .card p:nth-child(1)
+  color: #fff
+
 #chancol .card p:nth-child(2)
-  color: #777
+  color: #fff9
+
+#chancol .card:hover
+  background-color: #fff2
+
+#chancol *::-moz-selection
+  background: #fff2
+  color: #fff
 
 #boardcol .threadmeta
   p:nth-child(1)
     font-weight: 600
-    color: #444
+    color: $accent
   p:nth-child(2)
     color: #777
 
 #boardcol
-  width: 400px
-
-#boardcol .card p:nth-child(2)
-  text-overflow: ellipsis
-  white-space: nowrap
-  overflow: hidden
+  width: 500px
+  margin-left: 20px
 
 #threadcol
   width: 600px
@@ -99,7 +177,7 @@ body
 #threadcol .postmeta
   span:nth-child(1)
     font-weight: 600
-    color: #444
+    color: $accent
     margin-right: 10px
   span:nth-child(2)
     color: #777
@@ -114,6 +192,7 @@ input
   border: 0
   width: 100%
   padding-bottom: 2px
+  background-color: #fff
 
 input:focus
   outline: 0
@@ -129,6 +208,7 @@ textarea
   width: 100%
   padding-bottom: 2px
   resize: none
+  background-color: #fff
 
 textarea:focus
   outline: 0
@@ -140,7 +220,7 @@ textarea:focus + .inputBorder
   display: block
   width: 100%
   content: ''
-  border-bottom: solid 2px #3498db
+  border-bottom: solid 2px $accent
   transform: scaleX(0)
   transform-origin:  0% 50%
   transition: transform 250ms ease-in-out
@@ -149,6 +229,9 @@ textarea:focus + .inputBorder
   margin: 0
   padding: 0
 
-::-moz-selection
+*:focus
+  outline: 0
+
+*::-moz-selection
     color: #000
     background: #D6EDFF

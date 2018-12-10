@@ -11,48 +11,56 @@ import history from './history'
 import Chan from './containers/Chan'
 import Board from './containers/Board'
 import Thread from './containers/Thread'
+import Sidebar from './containers/Sidebar'
 
 import { Transition } from 'react-spring'
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql"
-});
+import tippy from 'tippy.js'
+import 'tippy.js/dist/tippy.css'
+import 'tippy.js/dist/themes/light.css'
+
+tippy.setDefaults({
+  theme: "light",
+  delay: [500, null]
+})
+
+const initialClient = "http://localhost:4000/graphql"
 
 class Init extends React.Component {
 
-  state = {openBoards: [], openThreads: []}
+  state = {openBoards: [], openThreads: [], clients: [new ApolloClient({uri: initialClient}), new ApolloClient({uri: "https://arathnim.me/multichan/graphql"})]}
 
-  newBoard = (id) => {
-    if (this.state.openBoards.includes(id)) {
+  newBoard = (id, client, hash) => {
+    if (this.state.openBoards.map(x => x.hash).includes(hash)) {
       // TODO: scroll to it
     } else {
-      this.setState({openBoards: this.state.openBoards.concat([id])});
+      this.setState({openBoards: this.state.openBoards.concat([ {id, client, hash} ])});
       // const boards = document.getElementById(style.boardcol).getElementsByClassName(style.metacard);
       // boardWindowInstance.scroll(boards[boards.length - 1], 300, "easeInOutSine")
     }
   }
 
-  newThread = (id) => {
-    if (this.state.openThreads.includes(id)) {
+  newThread = (id, client, hash) => {
+    if (this.state.openThreads.map(x => x.hash).includes(hash)) {
       // TODO: scroll to it
     } else {
-      this.setState({openThreads: this.state.openThreads.concat([id])});
+      this.setState({openThreads: this.state.openThreads.concat([ {id, client, hash} ])});
       // const boards = document.getElementById(style.boardcol).getElementsByClassName(style.metacard);
       // boardWindowInstance.scroll(boards[boards.length - 1], 300, "easeInOutSine")
     }
   }
 
-  closeBoard = (id) => {
-    if (this.state.openBoards.includes(id)) {
-      this.setState({openBoards: this.state.openBoards.filter(x => x != id)});
+  closeBoard = (id, hash) => {
+    if (this.state.openBoards.map(x => x.hash).includes(hash)) {
+      this.setState({openBoards: this.state.openBoards.filter(x => x.hash != hash)});
     } else {
       console.log('tried to close non-existant board')
     }
   }
 
-  closeThread = (id) => {
-    if (this.state.openThreads.includes(id)) {
-      this.setState({openThreads: this.state.openThreads.filter(x => x != id)});
+  closeThread = (id, hash) => {
+    if (this.state.openThreads.map(x => x.hash).includes(hash)) {
+      this.setState({openThreads: this.state.openThreads.filter(x => x.hash != hash)});
     } else {
       console.log('tried to close non-existant thread')
     }
@@ -60,32 +68,24 @@ class Init extends React.Component {
 
   render() {
       return (
-        <ApolloProvider client={client}>
           <div className={style.root}>
 
-            <div className={style.col} id={style.chancol}>
-              <div className={style.colContent}>
-
-                <Transition
-                  items={true}
-                  from={{ opacity: 0, transform: 'translate3d(0,40px,0)', maxHeight: '1000px', marginTop: '20px'}}
-                  enter={{ opacity: 1, transform: 'translate3d(0,0px,0)', maxHeight: '1000px', marginTop: '20px'}}
-                  leave={{ opacity: -1, transform: 'translate3d(0,0px,0)', maxHeight: '0px',    marginTop: '0px'}}>
-                  {item => props => <Chan openNewBoard={this.newBoard} springStyle={props} />}
-                </Transition>
-
-              </div>
-            </div>
+            <Sidebar openNewBoard={this.newBoard} clients={this.state.clients}/>
 
             <div className={style.col} id={style.boardcol}>
               <div className={style.colContent}>
 
+                <div className={style.colspacer} />
+
                 <Transition
                   items={this.state.openBoards}
+                  keys={(item) => item.hash}
                   from={{ opacity: 0, transform: 'translate3d(0,40px,0)', maxHeight: '1000px', marginTop: '20px'}}
                   enter={{ opacity: 1, transform: 'translate3d(0,0px,0)', maxHeight: '1000px', marginTop: '20px'}}
                   leave={{ opacity: -1, transform: 'translate3d(0,0px,0)', maxHeight: '0px',    marginTop: '0px'}}>
-                  {item => props => <Board id={item} springStyle={props} openNewThread={this.newThread} closeBoard={this.closeBoard} />}
+                  {item => props =>
+                    <Board id={item.id} client={item.client} hash={item.hash} springStyle={props} openNewThread={this.newThread} closeBoard={this.closeBoard} />
+                  }
                 </Transition>
 
               </div>
@@ -94,12 +94,15 @@ class Init extends React.Component {
             <div className={style.col} id={style.threadcol}>
               <div className={style.colContent}>
 
+                <div className={style.colspacer} />
+
                 <Transition
                   items={this.state.openThreads}
+                  keys={(item) => item.hash}
                   from={{ opacity: 0, transform: 'translate3d(0,40px,0)', maxHeight: '1000px', marginTop: '20px'}}
                   enter={{ opacity: 1, transform: 'translate3d(0,0px,0)', maxHeight: '1000px', marginTop: '20px'}}
                   leave={{ opacity: -1, transform: 'translate3d(0,0px,0)', maxHeight: '0px',    marginTop: '0px'}}>
-                  {item => props => <Thread id={item} springStyle={props} closeThread={this.closeThread} />}
+                  {item => props => <Thread id={item.id} client={item.client} hash={item.hash} springStyle={props} closeThread={this.closeThread} />}
                 </Transition>
 
               </div>
@@ -107,11 +110,10 @@ class Init extends React.Component {
 
 
           </div>
-        </ApolloProvider>
       );
     }
 }
 
-document.title="multichan"
+document.title="Multichan"
 
 render(<Init />, document.getElementById('main'))

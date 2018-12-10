@@ -2,9 +2,12 @@ import React from 'react'
 import style from '../style.sass'
 
 import { Query, Mutation } from "react-apollo";
+import { ApolloProvider } from "react-apollo";
 import gql from "graphql-tag";
 
 import { Transition, Spring } from 'react-spring'
+
+import Tippy from '@tippy.js/react'
 
 const getChan = gql`
   {
@@ -108,11 +111,11 @@ class Chan extends React.Component {
     this.setState({addingNewBoard: false})
   }
 
-
   render() {
-    const {springStyle, openNewBoard} = this.props;
+    const {springStyle, openNewBoard, client} = this.props;
     const {addingNewBoard} = this.state;
     return (
+      <ApolloProvider client={client}>
       <Query query={getChan} pollInterval={10000}>
         {({ loading, error, data }) => {
           if (loading || error) {
@@ -126,13 +129,16 @@ class Chan extends React.Component {
                     from={{ transform: addingNewBoard ? 'rotate(0deg)' : 'rotate(135deg)' }}
                     to={{ transform: addingNewBoard ? 'rotate(135deg)' : 'rotate(0deg)' }}>
                     {props =>
-                      <i style={{...props, marginRight: '4px'}}
-                         className="fas fa-plus"
-                         onClick={() => this.setState({addingNewBoard: !addingNewBoard})} />}
+                      <Tippy content={addingNewBoard ? 'Cancel' : 'New post'}>
+                        <i style={{...props, marginRight: '4px'}}
+                           className="fas fa-plus"
+                           onClick={() => this.setState({addingNewBoard: !addingNewBoard})} />
+                      </Tippy>
+                      }
                   </Spring>
                 </div>
                 {data.boards.map((x) =>
-                  <div className={`${style.card} ${style.flexrow}`} onClick={() => openNewBoard(x.id)}>
+                  <div className={`${style.card} ${style.flexrow}`} onClick={() => openNewBoard(x.id, client, x.id + x.name + x.description + data.name)}>
                     <p>{x.name}</p>
                     <p>{x.description}</p>
                   </div>
@@ -152,6 +158,7 @@ class Chan extends React.Component {
         }
         }
       </Query>
+      </ApolloProvider>
     )
   }
 

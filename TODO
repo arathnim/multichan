@@ -1,8 +1,22 @@
 [x] Enter animations for metacard components
-[ ] menu ui for metacards
-  [ ] new board/thread/post
-  [ ] close
-[ ] setting/federation left column ui
-[ ] animated input fields
-[ ] Smooth animation for adding new threads/posts on update
+[x] menu ui for metacards
+  [x] new board/thread/post
+  [x] close
+[x] setting/federation left column ui
+[x] animated input fields
+[x] Smooth animation for adding new threads/posts on update
 [ ] scroll div to element on click
+[ ] reorder cards
+[x] better indicators of when things are clickable
+[ ] mobile UI
+[ ] indicator of which board a thread comes from
+[ ] make input components smaller
+[ ] no open threads/posts placeholder
+[ ] federate/unfederate
+[ ] local storage
+[ ] search
+[ ] settings
+[ ] pagination
+[ ] post reply UI
+[ ] Post input newlines
+[ ] local hosting of FA and Fonts

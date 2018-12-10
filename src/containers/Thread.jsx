@@ -2,6 +2,7 @@ import React from 'react'
 import style from '../style.sass'
 
 import { Query, Mutation } from "react-apollo";
+import { ApolloProvider } from "react-apollo";
 import gql from "graphql-tag";
 
 import { Transition, Spring } from 'react-spring'
@@ -121,9 +122,10 @@ class Thread extends React.Component {
 
 
   render() {
-    const {springStyle, closeThread, id} = this.props;
+    const {springStyle, closeThread, id, client, hash} = this.props;
     const {addingNewPost} = this.state;
     return (
+      <ApolloProvider client={client}>
       <Query query={getThread} pollInterval={10000} variables={{ id: id }}>
         {({ loading, error, data }) => {
           if (loading || error) {
@@ -131,7 +133,7 @@ class Thread extends React.Component {
           } else {
             return (
               <div className={style.metacard} style={springStyle}>
-                <div className={`${style.metacardheader} ${style.header}`} onClick={() => closeThread(id)}>
+                <div className={`${style.metacardheader} ${style.header}`} onClick={() => closeThread(id, hash)}>
                   <p>{data.thread.name}</p>
                   <Spring
                     from={{ transform: addingNewPost ? 'rotate(0deg)' : 'rotate(135deg)' }}
@@ -169,6 +171,7 @@ class Thread extends React.Component {
         }
         }
       </Query>
+      </ApolloProvider>
     )
   }
 

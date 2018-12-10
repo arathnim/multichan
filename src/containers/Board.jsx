@@ -2,9 +2,12 @@ import React from 'react'
 import style from '../style.sass'
 
 import { Query, Mutation } from "react-apollo";
+import { ApolloProvider } from "react-apollo";
 import gql from "graphql-tag";
 
 import { Transition, Spring } from 'react-spring'
+
+import Tippy from '@tippy.js/react'
 
 import TextareaAutosize from 'react-autosize-textarea';
 
@@ -136,9 +139,10 @@ class Board extends React.Component {
 
 
   render() {
-    const {springStyle, openNewThread, closeBoard, id} = this.props;
+    const {springStyle, openNewThread, closeBoard, id, client, hash} = this.props;
     const {addingNewThread} = this.state;
     return (
+      <ApolloProvider client={client}>
       <Query query={getBoard} pollInterval={10000} variables={{ id: id }}>
         {({ loading, error, data }) => {
           if (loading || error) {
@@ -146,22 +150,23 @@ class Board extends React.Component {
           } else {
             return (
               <div className={style.metacard} style={springStyle}>
-                <div className={`${style.metacardheader} ${style.header}`} onClick={() => closeBoard(id)}>
+                <div className={`${style.metacardheader} ${style.header}`} onClick={() => closeBoard(id, hash)}>
                   <p>{data.board.name}</p>
                   <Spring
                     from={{ transform: addingNewThread ? 'rotate(0deg)' : 'rotate(135deg)' }}
                     to={{ transform: addingNewThread ? 'rotate(135deg)' : 'rotate(0deg)' }}>
                     {props =>
-                      <i style={{...props, marginRight: '4px'}}
-                         className="fas fa-plus"
-                         onClick={(e) => {
-                           e.stopPropagation()
-                           this.setState({addingNewThread: !addingNewThread})
-                         }} />}
+                        <i style={{...props, marginRight: '4px'}}
+                           className="fas fa-plus"
+                           onClick={(e) => {
+                             e.stopPropagation()
+                             this.setState({addingNewThread: !addingNewThread})
+                           }} />
+                    }
                   </Spring>
                 </div>
                 {data.board.threads.map((x) =>
-                  <div className={style.card} onClick={() => openNewThread(x.id)}>
+                  <div className={style.card} onClick={() => openNewThread(x.id, client, hash + x.id + x.name + x.posts[0].message)}>
                     <div className={`${style.threadmeta} ${style.flexrow}`}>
                       <p>{x.name}</p>
                       <p>{x.posts[0].author}</p>
@@ -184,6 +189,7 @@ class Board extends React.Component {
         }
         }
       </Query>
+      </ApolloProvider>
     )
   }
 
